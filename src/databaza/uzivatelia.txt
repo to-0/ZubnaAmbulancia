@@ -1,0 +1,2 @@
+0:M:Ujo:Velky:Slnecnicova:3:Pezinok:35:0900123456:majitel@zub.zub
+1:Z:Jozko:Mrkvicka:Hovnova:3:Bratislava:30:123456790:jozko@ujozka.zub

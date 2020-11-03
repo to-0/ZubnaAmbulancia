@@ -1,11 +1,9 @@
 package pouzivatelia;
 
-import model.Clovek;
+public class Recepcna extends Zamestnanec {
 
-public class Recepcna extends Zamestnanci {
-
-	public Recepcna(String firstn, String secondN, int age, String phone_num,String email) {
-		super(firstn, secondN, age, phone_num,email);
+	public Recepcna(String meno,String priezvisko,String ulica, int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
+		super(meno, priezvisko,ulica,cislo_domu, obec, vek, telefon, email, id, typ);
 		// TODO Auto-generated constructor stub
 	}
 
