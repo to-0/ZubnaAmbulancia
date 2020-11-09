@@ -50,11 +50,12 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		ArrayList<Sestricka> sestricky = new ArrayList<Sestricka>();
 		ArrayList<Recepcna> recepcne = new ArrayList<Recepcna>();
 		ArrayList<Pacient> pacienti = new ArrayList<Pacient>();
-		System.out.println("Idem skusit otvorit subor");
+		
 		try (Scanner scan = new Scanner(subor)) {
 			System.out.println("Otvoril som");
 			System.out.println("ID "+id);
 			while(scan.hasNextLine()) {
+				
 				String riadok = scan.nextLine();
 				String[] casti = riadok.split(":");
 				String krstne_meno = casti[2];
@@ -65,13 +66,17 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 				String cislo = casti[8];
 				String email = casti[9];
 				int vek = Integer.parseInt(casti[7]);
-				//if(casti.length!=6) continue; //precital som bullshit
+				
 				if("Z".equals(casti[1])) zubari.add(new Zubar(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'Z'));
 				if("S".equals(casti[1])) sestricky.add(new Sestricka(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'S'));
 				if("R".equals(casti[1])) recepcne.add(new Recepcna(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'R'));
-				if("P".equals(casti[1])) pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P'));
-				
-				System.out.println("TU TU TUTU "+casti[0]);
+				if("P".equals(casti[1])) {
+					String rodne_c = casti[10];
+					String zub = casti[11];
+					String poistovna = casti[12];
+					pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P',rodne_c,poistovna,zub));
+					
+				}
 				int nac_id = Integer.parseInt(casti[0]);
 				if(id==nac_id) {
 					System.out.println("Nasiel som ho");
@@ -112,7 +117,6 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 				//nasiel som daneho pacienta nacitam udaje o nom 
 				if(id==Integer.parseInt(casti[0])) {
 					Pacient p = new Pacient(krstne_meno, priezvisko,ulica,cislo_domu,obec, vek, cislo,email,id,typ);
-					
 					p.pridajPrihl_udaje(nick, heslo);
 				}
 			}
@@ -143,8 +147,14 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 				int vek = Integer.parseInt(casti[7]);
 				String cislo = casti[8];
 				String email = casti[9];
-				if(casti.length!=6) continue; //precital som bullshit
-				if("P".equals(casti[1])) pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P'));
+
+				if("P".equals(casti[1])) {
+					String rodne_c = casti[10];
+					String zub = casti[11];
+					String poistovna = casti[12];
+					pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P',rodne_c,poistovna,zub));
+					
+				}
 				
 				//nasiel som daneho zamestnanca nacitam udaje o nom 
 				if(id==Integer.parseInt(casti[0])) {

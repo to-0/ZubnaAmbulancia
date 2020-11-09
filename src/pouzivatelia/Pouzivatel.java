@@ -5,16 +5,16 @@ import java.util.Scanner;
 import model.Adresa;
 import model.ID_typ;
 
-public class Clovek {
-	private ID_typ id_typ;
-	private String meno;
-	private String priezvisko;
-	private int vek;
-	private String tel_cislo;
-	private String email;
-	private PrihlasovacieUdaje prihlas_udaje;
-	private Adresa adresa;
-	public Clovek(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
+public class Pouzivatel {
+	 ID_typ id_typ;
+	 String meno;
+	 String priezvisko;
+	 int vek;
+	 String tel_cislo;
+	 String email;
+	 PrihlasovacieUdaje prihlas_udaje;
+	 Adresa adresa;
+	public Pouzivatel(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
 		this.setMeno(meno);
 		this.adresa = new Adresa(ulica,cislo_domu,obec);
 		this.setPriezvisko(priezvisko);
@@ -23,11 +23,10 @@ public class Clovek {
 		this.setEmail(email);
 		this.setId_typ(new ID_typ(id, typ));
 		this.prihlas_udaje = new PrihlasovacieUdaje();
-		
 	}
 	public String toString() {
 		String s= "Meno pacienta: "+this.getMeno()+" "+this.getPriezvisko()+"\nVek: " + this.getVek()+"\nTelefonne cislo:"
-				+this.getTel_cislo() + "\n Email: "+this.getEmail();
+				+this.getTel_cislo() + "\n Email: "+this.getEmail() + "\nAdresa: "+this.adresa.getUlica() + " "+this.adresa.getCislo_domu()+" "+this.adresa.getObec();
 		return s;
 	}
 	public void vypisOsInf() {
@@ -78,6 +77,11 @@ public class Clovek {
 		this.prihlas_udaje.setMeno(meno);
 		this.prihlas_udaje.setHeslo(heslo);
 	}
+	public String toWriter() {
+		String s = this.id_typ.getId()+":"+this.id_typ.getTyp()+":"+this.meno+":"+this.priezvisko+":"+this.adresa.getUlica()+":"+
+	this.adresa.getCislo_domu()+":"+this.adresa.getObec()+":"+this.vek+":"+this.tel_cislo+":"+this.email;
+		return s;
+	}
 	public void zmenHeslo(Scanner scan) {
 		System.out.println("Zadajte stare heslo:");
 		String stare_heslo = scan.nextLine();
@@ -87,9 +91,11 @@ public class Clovek {
 			System.out.println("Ste si isty ze chcete zmenit heslo na: "+nove_heslo + " A/N");
 			char c = scan.nextLine().toUpperCase().charAt(0);
 			if(c=='A') {
-				/*tu budem musiet prepisat ten subor cely.... prihlasovania.txt a vynechat
+				/*
+				 * tu budem musiet prepisat ten subor cely.... prihlasovania.txt a vynechat
 				ten riadok s pouzivatelom a napisat ho asi nakoniec s rovnakym id ale
-				inym heslom*/
+				inym heslom
+				*/
 				this.prihlas_udaje.setHeslo(nove_heslo); 
 				
 			}
@@ -135,6 +141,7 @@ public class Clovek {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-
+	public PrihlasovacieUdaje getPrihlasUdaje() {
+		return this.prihlas_udaje;
+	}
 }

@@ -1,8 +1,8 @@
 package model;
 
 public class ID_typ {
-	private int id;
-	private char typ; //zubar, sestricka, recepcia, majitel, pacient
+	public int id;
+	public char typ; //zubar, sestricka, recepcia, majitel, pacient
 	public ID_typ(int id, char povolanie) {
 		this.id = id;
 		this.typ = povolanie;

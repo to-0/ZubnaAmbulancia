@@ -43,11 +43,11 @@ public class Majitel extends Zamestnanec {
 		System.out.println("Cislo domu:");
 		int cislo_domu= scan.nextInt();
 		System.out.println("Obec:");
-		String obec = scan.nextLine();
-		System.out.println("Vek");
-		int vek = Integer.parseInt(scan.nextLine());
+		String obec = scan.next();
+		System.out.println("Vek:");
+		int vek = scan.nextInt();
 		System.out.println("Telefonne cislo:");
-		String cislo = scan.nextLine();
+		String cislo = scan.next();
 		System.out.println("Email:");
 		String email = scan.nextLine();
 		switch(typ.charAt(0)) {

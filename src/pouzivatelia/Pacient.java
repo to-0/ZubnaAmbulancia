@@ -5,7 +5,7 @@ import java.util.Scanner;
 import databaza.Reader;
 import model.Termin;
 
-public class Pacient extends Clovek {
+public class Pacient extends Pouzivatel {
 	private String meno_zubara;
 	private String rodne_cislo;
 	private String poistovna;
@@ -13,11 +13,28 @@ public class Pacient extends Clovek {
 	public Pacient(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
 		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);
 		this.terminy = Reader.nacitajTerminy(this.getId_typ().getId());
+		this.poistovna = "Nezadane";
+		this.rodne_cislo = "Nezadane";
+		this.meno_zubara= "Nezadane";
+	}
+	public Pacient(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ,
+			String rodne_cislo,String poistovna, String meno_z){
+		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);
+		this.terminy = Reader.nacitajTerminy(this.getId_typ().getId());
+		this.poistovna = poistovna;
+		this.rodne_cislo = rodne_cislo;
+		this.meno_zubara= meno_z;
 	}
 	public String toString() {
 		String s= "Meno pacienta: "+this.getMeno()+" "+this.getPriezvisko()+"\nVek: " + this.getVek()+"\nTelefonne cislo:"
 				+this.getTel_cislo() + "\n Email: "+this.getEmail() +"\nRodne cislo"+this.rodne_cislo+"\nPoistovna:"+this.poistovna
 				+"\nMeno osetrujuceho zubara: "+this.meno_zubara;
+		return s;
+	}
+	public String toWriter() {
+		System.out.println("pacient to writer");
+		String s = this.getId_typ().getId()+":"+this.getId_typ().getTyp()+":"+this.meno+":"+this.priezvisko+":"+this.adresa.getUlica()+":"+
+	this.adresa.getCislo_domu()+":"+this.adresa.getObec()+":"+this.vek+":"+this.tel_cislo+":"+this.email;
 		return s;
 	}
 	

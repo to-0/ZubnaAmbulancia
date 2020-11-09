@@ -1,6 +1,5 @@
-package core;
+package jadro;
 
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import databaza.Reader;
@@ -19,13 +18,17 @@ public class Main {
 		ID_typ id_typ = Reader.najdiUzivatela(meno, heslo);
 		switch(id_typ.getTyp()) {
 		case 'M':
-			Majitel m = Reader.nacitajMajitela(meno, id_typ.getId(),id_typ.getTyp(),heslo);
+			Majitel m = Reader.nacitajMajitela(meno, id_typ.id,id_typ.typ,heslo);
 			System.out.println("Nacital som");
-			if(m==null) return;
+			if(m==null) {
+				scan.close();
+				return;
+			}
 			m.pridajPrihl_udaje(meno, heslo);
 			//m.pridajZamestnanca();
 			m.vypisZamestnancov();
 		}
+		scan.close();
 
 	}
 
