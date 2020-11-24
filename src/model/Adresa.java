@@ -9,6 +9,10 @@ public class Adresa {
 		this.setCislo_domu(cislo);
 		this.setObec(obec);
 	}
+	public String toString() {
+		String s = this.ulica+" "+this.cislo_domu+" "+obec;
+		return s;
+	}
 	public String getUlica() {
 		return ulica;
 	}

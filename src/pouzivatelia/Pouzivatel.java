@@ -2,11 +2,17 @@ package pouzivatelia;
 
 import java.util.Scanner;
 
+import databaza.Writer;
 import model.Adresa;
 import model.ID_typ;
+import model.PrihlasovacieUdaje;
 
 public class Pouzivatel {
-	 ID_typ id_typ;
+	//tu som to mal najprv vsetko private ale nedavalo mi to logicky moc zmysel
+	//pretoze samotnu class pouzivatel nemam inicializovanu iba sa z nej dedi
+	//a vsetky childy su v rovnakom package takze som to nechal na default...
+	//nechavam default aby pristup zostal iba v ramci balicka 
+	ID_typ id_typ;
 	 String meno;
 	 String priezvisko;
 	 int vek;
@@ -15,18 +21,18 @@ public class Pouzivatel {
 	 PrihlasovacieUdaje prihlas_udaje;
 	 Adresa adresa;
 	public Pouzivatel(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
-		this.setMeno(meno);
+		this.meno = meno;
 		this.adresa = new Adresa(ulica,cislo_domu,obec);
-		this.setPriezvisko(priezvisko);
+		this.priezvisko = priezvisko;
 		this.vek = vek;
-		this.setTel_cislo(telefon);
-		this.setEmail(email);
-		this.setId_typ(new ID_typ(id, typ));
-		this.prihlas_udaje = new PrihlasovacieUdaje();
+		this.tel_cislo = telefon;
+		this.email = email;
+		this.id_typ = new ID_typ(id, typ);
+		this.prihlas_udaje = null;
 	}
 	public String toString() {
-		String s= "Meno pacienta: "+this.getMeno()+" "+this.getPriezvisko()+"\nVek: " + this.getVek()+"\nTelefonne cislo:"
-				+this.getTel_cislo() + "\n Email: "+this.getEmail() + "\nAdresa: "+this.adresa.getUlica() + " "+this.adresa.getCislo_domu()+" "+this.adresa.getObec();
+		String s= "Vase meno: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo:"
+				+this.tel_cislo + "\n Email: "+this.email + "\nAdresa: "+this.adresa.toString();
 		return s;
 	}
 	public void vypisOsInf() {
@@ -67,15 +73,16 @@ public class Pouzivatel {
 		case 'T': 
 			this.upravTel(scan);
 			break;
-		case 'K': return; 
+		case 'K': 
+			scan.close();
+			return; 
 		case 'E': this.upravE(scan);
 		case 'A': this.upravA(scan);
-			
 		}
+		scan.close();
 	}
 	public void pridajPrihl_udaje(String nick, String heslo) {
-		this.prihlas_udaje.setMeno(meno);
-		this.prihlas_udaje.setHeslo(heslo);
+		this.prihlas_udaje = new PrihlasovacieUdaje(nick,heslo);
 	}
 	public String toWriter() {
 		String s = this.id_typ.getId()+":"+this.id_typ.getTyp()+":"+this.meno+":"+this.priezvisko+":"+this.adresa.getUlica()+":"+
@@ -91,11 +98,7 @@ public class Pouzivatel {
 			System.out.println("Ste si isty ze chcete zmenit heslo na: "+nove_heslo + " A/N");
 			char c = scan.nextLine().toUpperCase().charAt(0);
 			if(c=='A') {
-				/*
-				 * tu budem musiet prepisat ten subor cely.... prihlasovania.txt a vynechat
-				ten riadok s pouzivatelom a napisat ho asi nakoniec s rovnakym id ale
-				inym heslom
-				*/
+				Writer.zmenHeslo(this, nove_heslo);
 				this.prihlas_udaje.setHeslo(nove_heslo); 
 				
 			}
@@ -111,36 +114,13 @@ public class Pouzivatel {
 	public ID_typ getId_typ() {
 		return id_typ;
 	}
-	public void setId_typ(ID_typ id_typ) {
-		this.id_typ = id_typ;
-	}
 	public String getMeno() {
 		return meno;
 	}
-	public void setMeno(String meno) {
-		this.meno = meno;
+	public String getPriezvisko(){
+		return this.priezvisko;
 	}
-	public String getPriezvisko() {
-		return priezvisko;
-	}
-	public void setPriezvisko(String priezvisko) {
-		this.priezvisko = priezvisko;
-	}
-	public int getVek() {
-		return vek;
-	}
-	public String getTel_cislo() {
-		return tel_cislo;
-	}
-	public void setTel_cislo(String tel_cislo) {
-		this.tel_cislo = tel_cislo;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	
 	public PrihlasovacieUdaje getPrihlasUdaje() {
 		return this.prihlas_udaje;
 	}

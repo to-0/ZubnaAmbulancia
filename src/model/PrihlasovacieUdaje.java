@@ -1,4 +1,4 @@
-package pouzivatelia;
+package model;
 
 public class PrihlasovacieUdaje {
 	private String meno;

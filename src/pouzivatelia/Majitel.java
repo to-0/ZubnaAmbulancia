@@ -2,6 +2,8 @@ package pouzivatelia;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import databaza.Writer;
+
 public class Majitel extends Zamestnanec {
 	private ArrayList<Zubar> zubari = new ArrayList<Zubar>();
 	private ArrayList<Sestricka> sestricky = new ArrayList<Sestricka>();
@@ -49,19 +51,33 @@ public class Majitel extends Zamestnanec {
 		System.out.println("Telefonne cislo:");
 		String cislo = scan.next();
 		System.out.println("Email:");
-		String email = scan.nextLine();
+		String email = scan.next();
+		System.out.println("Prihlasovacie meno:");
+		String nick = scan.next();
+		System.out.println("Heslo:");
+		String heslo = scan.next();
+		//TODO mozno refaktorovat tu
 		switch(typ.charAt(0)) {
 		case 'Z':
-			Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.pocet_pouzivatelov+1,'Z');
+			Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'Z');
+			this.setPocetPo(this.getPocetPo()+1);
+			z.pridajPrihl_udaje(nick, heslo);
+			Writer.zapisPouzivatela(z);
 			zubari.add(z);
 			break;
 		case 'R':
-			Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.pocet_pouzivatelov+1,'R');
+			Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'R');
 			recepcia.add(rec);
+			rec.pridajPrihl_udaje(nick, heslo);
+			Writer.zapisPouzivatela(rec);
+			this.setPocetPo(this.getPocetPo()+1);
 			break;
 		case 'S':
-			Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.pocet_pouzivatelov+1,'S');
+			Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'S');
 			sestricky.add(s);
+			s.pridajPrihl_udaje(nick, heslo);
+			Writer.zapisPouzivatela(s);
+			this.setPocetPo(this.getPocetPo()+1);
 		}
 		
 	}
