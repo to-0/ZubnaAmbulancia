@@ -2,6 +2,7 @@ package pouzivatelia;
 
 import java.util.Scanner;
 
+import databaza.Reader;
 import databaza.Writer;
 
 public class Recepcna extends Zamestnanec {
@@ -38,8 +39,6 @@ public class Recepcna extends Zamestnanec {
 		String poistovna = scan.next();
 		System.out.println("Meno osetrujuceho zubara: ");
 		String zubar = scan.next();
-		
-		
 		Pacient p = new Pacient(krstne,priezvisko,ulica,cislo,obec,vek,tel,email,id,'P',rodne_c,zubar,poistovna);
 		p.pridajPrihl_udaje(nick, heslo);
 		if(p==null) return false;
@@ -47,20 +46,25 @@ public class Recepcna extends Zamestnanec {
 		Writer.zapisPouzivatela(p);
 		return true;
 	}
-	//TODO
 	public  boolean odstranPacienta(int id) {
-		Pacient temp;
+		Pacient p=null;
 		int i=0;
 		int index=-1;
-		for(Pacient p: this.pacienti) {
-			if(p.id_typ.getId()==id) {
-				temp = p;
+		for(Pacient pac: this.pacienti) {
+			if(pac.id_typ.getId()==id) {
+				p = pac;
 				index = i;
 				break;
 			}
 			i++;
 		}
-		Writer.vymazPac(this.pacienti.get(index));
+		if(p==null)return false;
+		System.out.println("TOTO\n"+p.toWriter());
+		if(Writer.vymazRiadok(Writer.uzivatelia_cesta, p.toWriter())) {
+			String riadok = Reader.najdiPrihlUd(id);
+			System.out.println("riadok "+riadok);
+			Writer.vymazRiadok(Writer.prihlasovania_cesta,riadok);
+		}
 		if(index!=-1)
 			this.pacienti.remove(this.pacienti.get(index));
 		else return false;

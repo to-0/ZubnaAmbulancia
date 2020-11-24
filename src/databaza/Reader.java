@@ -77,6 +77,24 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		}
 		
 	}
+	public static String najdiPrihlUd(int id) {
+		File subor = new File(prihlasovania_cesta);
+		try (Scanner scan = new Scanner(subor)) {
+			while(scan.hasNextLine()) {
+				String riadok = scan.nextLine();
+				System.out.println(riadok);
+				String []parts = riadok.split(":");
+				if(Integer.parseInt(parts[0])==id) {
+					return riadok;
+				}
+					
+			}
+			return null; //ak neexistuje 
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static ID_typ najdiUzivatela(String meno, String heslo) { //hladam pouzivatela ci existuje, ci sa rovna heslo a vratim id
 		File subor = new File(prihlasovania_cesta);
 		try (Scanner scan = new Scanner(subor)) {
@@ -206,7 +224,7 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 					String rodne_c = casti[10];
 					String zub = casti[11];
 					String poistovna = casti[12];
-					pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P',rodne_c,poistovna,zub));
+					pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P',rodne_c,zub,poistovna));
 					
 				}
 				//System.out.println("ID ="+casti[0]);

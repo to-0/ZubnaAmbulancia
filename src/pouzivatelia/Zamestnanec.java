@@ -22,6 +22,7 @@ public class Zamestnanec extends Pouzivatel {
 		System.out.println("Idem vypisat pacientov");
 		for(Pacient p: this.pacienti) {
 			System.out.println(p.toString());
+			System.out.println();
 		}
 	}
 	public void zobrazPacienta(int id) {

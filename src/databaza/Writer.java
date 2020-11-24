@@ -63,39 +63,7 @@ public class Writer {
 		}
 		
 	}
-	public static void vymazVolTerm(Termin t,String zubar) {
-		File inputFile = new File(vol_term_cesta);
-        File tempFile = new File(temp_cesta);
-		try {
-			 BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-			 BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-			 String riadokVymaz = t.toWriter()+":"+zubar;
-			 System.out.println(riadokVymaz);
-		     String riadok;
-		     System.out.println("Idem na while");
-		        while((riadok = reader.readLine()) != null) {
-		            String trimmedLine = riadok.trim();
-		            System.out.println("trimedline "+trimmedLine);
-		            if(trimmedLine.equals(riadokVymaz)) {
-		            	System.out.println("Rovna sa riadok");
-		            	continue;
-		            	}
-		            writer.write(riadok + System.getProperty("line.separator"));
-		            }        
-		        writer.close(); 
-		        reader.close(); 
-		        inputFile.delete();
-		        boolean successful = tempFile.renameTo(inputFile);
-		        System.out.println(successful+"tu");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-	}
-	public static void vymazRiadok(String cesta, String riadok) {
+	public static boolean vymazRiadok(String cesta, String riadok) {
 		File inputFile = new File(cesta);
 		File tempFile = new File(temp_cesta);
 		try {
@@ -113,74 +81,17 @@ public class Writer {
 		        reader.close(); 
 		        inputFile.delete();
 		        boolean successful = tempFile.renameTo(inputFile);
+		        if(successful) return true;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
-	}
-	static void vymazPrihlasovanie(String riadokVymaz) {
-		File inputFile = new File(prihlasovania_cesta);
-        File tempFile = new File(temp_cesta);
-		try {
-			 BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-			 BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-		     String riadok;
-		     System.out.println("Idem na while");
-		        while((riadok = reader.readLine()) != null) {
-		            String trimmedLine = riadok.trim();
-		            if(trimmedLine.equals(riadokVymaz)) {
-		            	System.out.println("Rovna sa riadok");
-		            	continue;
-		            	}
-		            writer.write(riadok + System.getProperty("line.separator"));
-		            }        
-		        writer.close(); 
-		        reader.close(); 
-		        inputFile.delete();
-		        boolean successful = tempFile.renameTo(inputFile);
-		        System.out.println(successful+"tu");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	public static void vymazPac(Pacient p) {
-		File inputFile = new File(uzivatelia_cesta);
-        File tempFile = new File(temp_cesta);
-		try {
-			 BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-			 BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-		     String riadok;
-		     String riadokVymaz = p.toWriter();
-		        while((riadok = reader.readLine()) != null) {
-		            String trimmedLine = riadok.trim();
-		            System.out.println("trimedline "+trimmedLine);
-		            if(trimmedLine.equals(riadokVymaz)) {
-		            	System.out.println("Rovna sa riadok");
-		            	continue;
-		            	}
-		            writer.write(riadok + System.getProperty("line.separator"));
-		            }        
-		        writer.close(); 
-		        reader.close(); 
-		        inputFile.delete();
-		        boolean successful = tempFile.renameTo(inputFile);
-		        if(successful) Writer.vymazPrihlasovanie(p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"
-		        		+p.getPrihlasUdaje().getHeslo()+":"+p.getId_typ().getTyp());
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		return false;
 	}
 	public static void zmenHeslo(Pouzivatel p,String noveh) {
 		File inputFile = new File(prihlasovania_cesta);
@@ -202,7 +113,7 @@ public class Writer {
 		        reader.close(); 
 		        inputFile.delete();
 		        boolean successful = tempFile.renameTo(inputFile);
-		        if(successful) Writer.vymazPrihlasovanie(p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"
+		        if(successful) Writer.vymazRiadok(prihlasovania_cesta,p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"
 		        		+p.getPrihlasUdaje().getHeslo()+":"+p.getId_typ().getTyp());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

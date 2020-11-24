@@ -46,7 +46,8 @@ public class Pacient extends Pouzivatel {
 	}
 	public String toWriter() {
 		String s = this.id_typ.getId()+":"+this.id_typ.getTyp()+":"+this.meno+":"+this.priezvisko+":"+this.adresa.getUlica()+":"+
-	this.adresa.getCislo_domu()+":"+this.adresa.getObec()+":"+this.vek+":"+this.tel_cislo+":"+this.email;
+	this.adresa.getCislo_domu()+":"+this.adresa.getObec()+":"+this.vek+":"+this.tel_cislo+":"+this.email+":"+this.rodne_cislo+":"+
+				this.meno_zubara+":"+this.poistovna;
 		return s;
 	}
 	 public boolean rezVolTerm(Scanner scan) {
