@@ -9,60 +9,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import jadro.App;
-import model.Termin;
+import jadro.Aplikacia;
 import pouzivatelia.Pacient;
 import pouzivatelia.Pouzivatel;
+import terminy.Termin;
+import terminy.VolnyTermin;
 
 public class Writer {
-	public static String prihlasovania_cesta = System.getProperty("user.dir")+"\\src\\databaza\\prihlasovania.txt";
-	public static String uzivatelia_cesta =  System.getProperty("user.dir")+"\\src\\databaza\\uzivatelia.txt";
-	public static String rez_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\rezervovane_terminy.txt";
-	public static String temp_cesta = System.getProperty("user.dir")+"\\src\\databaza\\temp.txt";
-	public static String vol_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\volne_terminy.txt";
-
-
-	public Writer() {
-		
-	}
-	public static void main(String[] args) {
-		Pacient p = new Pacient("Maly","Loptos","Loptova",10,"Loptovo",20,"0911111111","toto.email@email.email",
-				3,'P');
-		p.pridajPrihl_udaje("loptos", "123");
-		Writer.zapisPouzivatela(p);
-	}
-	static void pridajPrihlasenie(String meno, String heslo,int id, char typ) {
-         try {
-        	//File f = new File(prihlasovania_cesta);
-    		//FileWriter fileWritter = new FileWriter(f.getName(),true);
-        	 FileWriter fileWritter = new FileWriter(prihlasovania_cesta,true);
-            BufferedWriter bw = new BufferedWriter(fileWritter);
-            String data = id+":"+meno+":"+heslo+":"+typ;
-			bw.write("\n"+data);
-			bw.close();
-			 System.out.println("Done");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	public static void zapisPouzivatela(Pouzivatel p) {
-		try {
-			//File f = new File(uzivatelia_cesta);
-			FileWriter fileWritter = new FileWriter(uzivatelia_cesta,true);
-            BufferedWriter bw = new BufferedWriter(fileWritter);
-            
-            PrintWriter out = new PrintWriter(bw);
-            Writer.pridajPrihlasenie(p.getPrihlasUdaje().getMeno(),p.getPrihlasUdaje().getHeslo(),p.getId_typ().getId(),p.getId_typ().getTyp());
-			bw.write("\n"+p.toWriter()); //nie som si isty ci to pojde aj ked pouzivatel bude pacient kde je to prekonane ta metoda
-			//out.println(p.toWriter()); //toto  mi tu pekne vypise novy riadok idk
-			bw.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
+	public static final String prihlasovania_cesta = System.getProperty("user.dir")+"\\src\\databaza\\prihlasovania.txt";
+	public static final String uzivatelia_cesta =  System.getProperty("user.dir")+"\\src\\databaza\\uzivatelia.txt";
+	public static final String rez_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\rezervovane_terminy.txt";
+	public static final String temp_cesta = System.getProperty("user.dir")+"\\src\\databaza\\temp.txt";
+	public static final String vol_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\volne_terminy.txt";
 	public static boolean vymazRiadok(String cesta, String riadok) {
 		File inputFile = new File(cesta);
 		File tempFile = new File(temp_cesta);
@@ -100,11 +58,11 @@ public class Writer {
 			 BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 			 BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 		     String riadok;
-		     String riadokVymaz = p.toWriter();
+		     String riadokVymaz = p.getId_typ().getId()+":"+p.getPrihlasUdaje().toWriter()+":"+p.getId_typ().getTyp();
 		        while((riadok = reader.readLine()) != null) {
 		            String trimmedLine = riadok.trim();
 		            if(trimmedLine.equals(riadokVymaz)) {
-		            	writer.write(p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"+noveh+":"+p.getId_typ().getTyp());
+		            	writer.write(p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"+noveh+":"+p.getId_typ().getTyp()+System.getProperty("line.separator"));
 		            	continue;
 		            	}
 		            writer.write(riadok + System.getProperty("line.separator"));
@@ -113,8 +71,6 @@ public class Writer {
 		        reader.close(); 
 		        inputFile.delete();
 		        boolean successful = tempFile.renameTo(inputFile);
-		        if(successful) Writer.vymazRiadok(prihlasovania_cesta,p.getId_typ().getId()+":"+p.getPrihlasUdaje().getMeno()+":"
-		        		+p.getPrihlasUdaje().getHeslo()+":"+p.getId_typ().getTyp());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,12 +79,11 @@ public class Writer {
 			e.printStackTrace();
 		}
 	}
-	public static boolean pridajTerm(Termin t) {
+	public static boolean pridajRiadok(String cesta,String riadok) {
 		try {
-			FileWriter fileWritter = new FileWriter(vol_term_cesta,true);
+			FileWriter fileWritter = new FileWriter(cesta,true);
             BufferedWriter bw = new BufferedWriter(fileWritter);
-            PrintWriter out = new PrintWriter(bw);
-			bw.write("\n"+t.toWriter()); //nie som si isty ci to pojde aj ked pouzivatel bude pacient kde je to prekonane ta metoda
+			bw.write("\n"+riadok); 
 			bw.close();
 			return true;
 		}
@@ -136,7 +91,6 @@ public class Writer {
 			e.printStackTrace();
 			return false;
 		}
-		
 	}
 
 }

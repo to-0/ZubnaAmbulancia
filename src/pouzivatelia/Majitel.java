@@ -1,106 +1,113 @@
 package pouzivatelia;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import databaza.Reader;
 import databaza.Writer;
 
 public class Majitel extends Zamestnanec {
-	private ArrayList<Zubar> zubari = new ArrayList<Zubar>();
-	private ArrayList<Sestricka> sestricky = new ArrayList<Sestricka>();
-	private ArrayList<Recepcna> recepcia = new ArrayList<Recepcna>();
-	private int pocet_pouzivatelov; //toto pri nacitani majitela musim zistit asi
-	public Majitel(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
+	private ArrayList<Zamestnanec> zamestnanci = new ArrayList<Zamestnanec>();
+		public Majitel(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
 		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);
-		// TODO Auto-generated constructor stub
 	}
 	public void vypisZamestnancov() {
-		System.out.println("Zubari");
-		for(Zubar zub: zubari) {
-			System.out.println(zub.getMeno() + " "+zub.getPriezvisko());
-		}
-		System.out.println("Sestricky");
-		for(Sestricka ses: sestricky) {
-			System.out.println(ses.getMeno() + " "+ses.getPriezvisko());
-		}
-		System.out.println("Recepcia");
-		for(Recepcna rec: recepcia) {
-			System.out.println(rec.getMeno() + " "+rec.getPriezvisko());
+		for(Zamestnanec z: this.zamestnanci) {
+			if(z instanceof Zubar) {
+				System.out.println("Pozicia: Zubar");
+			}
+			if(z instanceof Sestricka) System.out.println("Pozicia: Sestricka");
+			if(z instanceof Recepcna) System.out.println("Pozicia: Pracovnik na recepcii");
+			System.out.println(z.toString());
+			System.out.println();
 		}
 	}
-	public void pridajZamestnanca() {
-		Scanner scan = new Scanner(System.in);
+	public void pridajZamestnanca(Scanner scan) {
 		System.out.println("Idete pridavat zubara, recepcneho pracovnika alebo sestricku? Napiste (Z/R/S)");
-		String typ = scan.nextLine();
+		String typ = scan.next();
+		scan.nextLine();
 		char c = typ.charAt(0);
 		while(c!='Z' && c!='R' && c!='S' && c!='E') {
 			System.out.println("Neplatny vstup, prosim zvolte Z/R/S alebo ak chcete ukoncit pridavanie zamestnanca E");
 			typ = scan.nextLine();
 		} 
-		System.out.println("Meno:");
-		String meno = scan.nextLine();
-		System.out.println("Priezvisko:");
-		String priezvisko = scan.nextLine();
-		System.out.println("Ulica:");
-		String ulica= scan.nextLine();
-		System.out.println("Cislo domu:");
-		int cislo_domu= scan.nextInt();
-		System.out.println("Obec:");
-		String obec = scan.next();
-		System.out.println("Vek:");
-		int vek = scan.nextInt();
-		System.out.println("Telefonne cislo:");
-		String cislo = scan.next();
-		System.out.println("Email:");
-		String email = scan.next();
-		System.out.println("Prihlasovacie meno:");
-		String nick = scan.next();
-		System.out.println("Heslo:");
-		String heslo = scan.next();
-		//TODO mozno refaktorovat tu
-		switch(typ.charAt(0)) {
-		case 'Z':
-			Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'Z');
-			this.setPocetPo(this.getPocetPo()+1);
-			z.pridajPrihl_udaje(nick, heslo);
-			Writer.zapisPouzivatela(z);
-			zubari.add(z);
-			break;
-		case 'R':
-			Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'R');
-			recepcia.add(rec);
-			rec.pridajPrihl_udaje(nick, heslo);
-			Writer.zapisPouzivatela(rec);
-			this.setPocetPo(this.getPocetPo()+1);
-			break;
-		case 'S':
-			Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'S');
-			sestricky.add(s);
-			s.pridajPrihl_udaje(nick, heslo);
-			Writer.zapisPouzivatela(s);
-			this.setPocetPo(this.getPocetPo()+1);
+		try {
+			System.out.println("Meno:");
+			String meno = scan.nextLine();
+			System.out.println("Priezvisko:");
+			String priezvisko = scan.nextLine();
+			System.out.println("Obec:");
+			String obec = scan.nextLine();
+			System.out.println("Ulica:");
+			String ulica= scan.nextLine();
+			System.out.println("Cislo domu:");
+			int cislo_domu= scan.nextInt();
+			scan.nextLine();
+			System.out.println("Telefonne cislo:");
+			String cislo = scan.nextLine();
+			System.out.println("Vek:");
+			int vek;
+			vek = scan.nextInt();
+			scan.nextLine();
+			System.out.println("Email:");
+			String email = scan.nextLine();
+			System.out.println("Prihlasovacie meno:");
+			String nick = scan.nextLine();
+			System.out.println("Heslo:");
+			String heslo = scan.nextLine();
+			switch(typ.charAt(0)) {
+			case 'Z':
+				Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'Z');
+				this.setPocetPo(this.getPocetPo()+1);
+				z.pridajPrihl_udaje(nick, heslo);
+				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,z.toWriter())) {
+					String riadok = (this.getPocetPo())+":"+z.getPrihlasUdaje().toWriter()+":Z";
+					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
+				}
+				
+				zamestnanci.add(z);
+				break;
+			case 'R':
+				Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'R');
+				zamestnanci.add(rec);
+				rec.pridajPrihl_udaje(nick, heslo);
+				this.setPocetPo(this.getPocetPo()+1);
+				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,rec.toWriter())) {
+					String riadok = (this.getPocetPo())+":"+rec.getPrihlasUdaje().toWriter()+":R";
+					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
+				}
+				break;
+			case 'S':
+				Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'S');
+				zamestnanci.add(s);
+				s.pridajPrihl_udaje(nick, heslo);
+				this.setPocetPo(this.getPocetPo()+1);
+				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,s.toWriter())) {
+					String riadok = (this.getPocetPo())+":"+s.getPrihlasUdaje().toWriter()+":R";
+					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
+				}
+			}
+		}
+		catch (InputMismatchException ime) {
+			System.out.println("Zly input");
+			return;
 		}
 		
 	}
-	public void setZubari(ArrayList<Zubar> zoznam) {
-		this.zubari = zoznam;
+	public void odstranZamestnanca(int id) {
+		for(Zamestnanec z: this.zamestnanci) {
+			if(z.getId_typ().getId()==id) {
+				if(Writer.vymazRiadok(Writer.uzivatelia_cesta, z.toWriter())) {
+					String riadok = Reader.najdiPrihlUd(id);
+					System.out.println("tento riadok: "+riadok);
+					Writer.vymazRiadok(Writer.prihlasovania_cesta, riadok);
+				}
+				return;	
+			}
+		}
 	}
-	public void setRecepcia(ArrayList<Recepcna> zoznam) {
-		this.recepcia = zoznam;
-		
+	public void setZamestnanci(ArrayList<Zamestnanec> zoznam) {
+		this.zamestnanci = zoznam;
 	}
-	public void setSestricky(ArrayList<Sestricka> zoznam) {
-		this.sestricky = zoznam;
-	}
-	public ArrayList<Sestricka> getSestricky(){
-		return this.sestricky;
-	}
-	public ArrayList<Zubar> getZubari(){
-		return this.zubari;
-	}
-
-	public ArrayList<Recepcna> getRecepcia(){
-		return this.recepcia;
-	}
-
 
 }

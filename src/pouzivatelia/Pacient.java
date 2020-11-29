@@ -4,17 +4,17 @@ import java.util.Scanner;
 
 import databaza.Reader;
 import databaza.Writer;
-import model.Termin;
-
+import terminy.RezerTermin;
+import terminy.VolnyTermin;
 public class Pacient extends Pouzivatel {
 	private String meno_zubara;
 	private String rodne_cislo;
 	private String poistovna;
-	ArrayList<Termin> terminy = new ArrayList<Termin>();
-	ArrayList<Termin> volne_terminy = new ArrayList<Termin>();
+	ArrayList<RezerTermin> terminy = new ArrayList<RezerTermin>();
+	ArrayList<VolnyTermin> volne_terminy = new ArrayList<VolnyTermin>();
 	public Pacient(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ) {
 		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);
-		this.terminy = Reader.nacitajTerminy(this.priezvisko,this.id_typ);
+		this.terminy = Reader.nacitajRezerTerm(this.priezvisko,this.id_typ);
 		this.poistovna = "Nezadane";
 		this.rodne_cislo = "Nezadane";
 		this.meno_zubara= "Nezadane";
@@ -23,22 +23,20 @@ public class Pacient extends Pouzivatel {
 	public Pacient(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ,
 			String rodne_cislo, String meno_z,String poistovna){
 		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);
-		this.terminy = Reader.nacitajTerminy(this.priezvisko,this.id_typ);
+		this.terminy = Reader.nacitajRezerTerm(this.priezvisko,this.id_typ);
 		this.poistovna = poistovna;
 		this.rodne_cislo = rodne_cislo;
 		this.meno_zubara= meno_z;
 		this.volne_terminy = Reader.nacitajVolneTerm(this.meno_zubara);
 	}
 	public String toString() {
-		String s= "Meno pacienta: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo: "
-				+this.tel_cislo + "\nEmail: "+this.email +"\nRodne cislo: "+this.rodne_cislo+"\nPoistovna: "+this.poistovna
-				+"\nMeno osetrujuceho zubara: "+this.meno_zubara;
+		String s = super.toString()+"\n Rodne cislo: "+this.rodne_cislo+"\nPoistovna"+this.poistovna+"\nMeno osetrujuceho zubara: "+this.meno_zubara;
 		return s;
 	}
 	public void vypisVolneTerm() {
 		int count=1;
 		System.out.println(this.volne_terminy.size());
-		for(Termin t: this.volne_terminy) {
+		for(VolnyTermin t: this.volne_terminy) {
 			System.out.print("("+count+") ");
 			System.out.println(t.toString());
 			count++;
@@ -52,18 +50,19 @@ public class Pacient extends Pouzivatel {
 	}
 	 public boolean rezVolTerm(Scanner scan) {
 		 this.vypisVolneTerm();
-		 System.out.println("Napiste riadok cislo terminu");
+		 System.out.println("Napiste riadok terminu");
 		 int r = scan.nextInt();
 		 r--;
 		 if(r<0 && r>this.volne_terminy.size()-1) {
 			 System.out.print("Neplatny riadok");
 			 return false;
 		 }
-		 this.terminy.add(this.volne_terminy.get(r));
+		 RezerTermin novy = this.volne_terminy.get(r).toRezTerm(this.id_typ.getId(), this.priezvisko);
+		 this.terminy.add(novy);
 		 String riadok = this.volne_terminy.get(r).toWriter()+":"+this.meno_zubara;
 		 Writer.vymazRiadok(Writer.vol_term_cesta,riadok);
 		 this.volne_terminy.remove(r);
-		 
+		 Writer.pridajRiadok(Writer.rez_term_cesta,novy.toWriter());
 		 return true;
 	 }
 	
@@ -99,7 +98,7 @@ public class Pacient extends Pouzivatel {
 	
 	
 	public void vypisPacTerminy() {
-		for(Termin term: terminy) {
+		for(RezerTermin term: terminy) {
 			System.out.println(term.toString());
 		}
 	}

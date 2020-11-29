@@ -3,7 +3,7 @@ package pouzivatelia;
 import java.util.Scanner;
 
 import databaza.Writer;
-import model.Termin;
+import terminy.VolnyTermin;
 
 public class Sestricka extends Zamestnanec {
 
@@ -11,9 +11,7 @@ public class Sestricka extends Zamestnanec {
 		super(meno, priezvisko, ulica, cislo_domu, obec, vek, telefon, email, id, typ);
 			
 	}
-	//prida volny termin TODO
-	public void pridajTerm() {
-		Scanner scan = new Scanner(System.in);
+	public void pridajTerm(Scanner scan) {
 		System.out.println("Pridajte termin vo formate den"
 					+ ".mesiac.rok.hodina.minuta.zubar");
 		String []riadok = scan.nextLine().split(".");
@@ -21,8 +19,8 @@ public class Sestricka extends Zamestnanec {
 			System.out.println("Zly format");
 			return;
 		}
-		Termin t = new Termin(Integer.parseInt(riadok[0]),Integer.parseInt(riadok[1]),Integer.parseInt(riadok[2]),Integer.parseInt(riadok[3]),Integer.parseInt(riadok[4]),riadok[5]);
-		if(Writer.pridajTerm(t)) System.out.println("Termin pridany");
+		VolnyTermin t = new VolnyTermin(Integer.parseInt(riadok[0]),Integer.parseInt(riadok[1]),Integer.parseInt(riadok[2]),Integer.parseInt(riadok[3]),Integer.parseInt(riadok[4]),riadok[5]);
+		if(Writer.pridajRiadok(Writer.vol_term_cesta,t.toWriter())) System.out.println("Termin pridany");
 		else System.out.println("Nieco sa pokazilo");
 	}
 }

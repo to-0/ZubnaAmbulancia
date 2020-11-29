@@ -22,5 +22,9 @@ public class PrihlasovacieUdaje {
 	public void setMeno(String meno) {
 		this.meno = meno;
 	}
+	public String toWriter() {
+		String s = this.meno+":"+this.heslo;
+		return s;
+	}
 
 }

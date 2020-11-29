@@ -3,7 +3,7 @@ package pouzivatelia;
 import java.util.ArrayList;
 
 
-public class Zamestnanec extends Pouzivatel {
+public abstract class Zamestnanec extends Pouzivatel {
 	//nemam dovod to davat private neviem....
 	ArrayList<Pacient> pacienti; //vsetci pacienti v ambulancii
 	int pocetPo; //pocet pouzivatelov

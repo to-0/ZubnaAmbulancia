@@ -2,3 +2,5 @@
 1:Z:Jozko:Mrkvicka:Neviem:3:Bratislava:30:123456790:jozko@ujozka.zub
 2:P:Anton:Bernolak:Tulipanova:62:Vinicne:22:90934029340:pacient@pacient.pac:00011/123:Mrkvicka:Vseobecna3
 4:R:Janka:J:JA:23:JAJA:50:0000:jannka@j.k
+5:Z:Alex:Smith:Pekna:1:OJOJOJ:20:09090:jojo@jojo.sk
+6:Z:Tomko:Koko:SFD:10:Slov Grob:10:10:tomok

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import model.ID_typ;
-import model.Termin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +15,8 @@ import pouzivatelia.Recepcna;
 import pouzivatelia.Sestricka;
 import pouzivatelia.Zamestnanec;
 import pouzivatelia.Zubar;
+import terminy.RezerTermin;
+import terminy.VolnyTermin;
 
 public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel, overuje prihlasenie
 
@@ -24,12 +25,12 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 	static String rez_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\rezervovane_terminy.txt";
 	static String volne_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\volne_terminy.txt";
 
-	public static ArrayList<Termin> nacitajTerminy(String priezvisko,ID_typ id_typ){ //priezvisko a typ ci je zubar alebo pacient
+	public static ArrayList<RezerTermin> nacitajRezerTerm(String priezvisko,ID_typ id_typ){ //priezvisko a typ ci je zubar alebo pacient
 		File f;
 		f = new File(rez_term_cesta);
 		Scanner scan;
 		boolean nasiel = false;
-		ArrayList<Termin> terminy = new ArrayList<Termin>();
+		ArrayList<RezerTermin> terminy = new ArrayList<RezerTermin>();
 		try {
 			scan = new Scanner(f);
 			while(scan.hasNextLine()) {
@@ -44,8 +45,8 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 					if(arr[6].equals(priezvisko)) nasiel = true;	
 				}
 				if(nasiel) {
-					terminy.add(new Termin(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),
-							Integer.parseInt(arr[2]),Integer.parseInt(arr[3]),Integer.parseInt(arr[4]),arr[5]));
+					terminy.add(new RezerTermin(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),
+							Integer.parseInt(arr[2]),Integer.parseInt(arr[3]),Integer.parseInt(arr[4]),arr[5],arr[6],Integer.parseInt(arr[7])));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -56,15 +57,15 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		scan.close();
 		return terminy;
 	}
-	public static ArrayList<Termin> nacitajVolneTerm(String zub) { //mozno neskor zmenit ze aby to zobrazilo iba podla zubara
+	public static ArrayList<VolnyTermin> nacitajVolneTerm(String zub) { //mozno neskor zmenit ze aby to zobrazilo iba podla zubara
 		File f = new File(volne_term_cesta);
-		ArrayList<Termin> zoznam = new ArrayList<Termin>();
+		ArrayList<VolnyTermin> zoznam = new ArrayList<VolnyTermin>();
 		try {
 			Scanner scan = new Scanner(f);
 			while(scan.hasNextLine()) {
 				String [] arr = scan.nextLine().split(":");
 				if(zub.equals(arr[5])) {
-					zoznam.add(new Termin(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),
+					zoznam.add(new VolnyTermin(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),
 							Integer.parseInt(arr[2]),Integer.parseInt(arr[3]),Integer.parseInt(arr[4]),arr[5]));
 				}
 			}
@@ -118,14 +119,10 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 	public static Majitel nacitajMajitela(String nick,int id,char typ,String heslo) {
 		File subor = new File(uzivatelia_cesta);
 		Majitel m = null;
-		ArrayList<Zubar> zubari = new ArrayList<Zubar>();
-		ArrayList<Sestricka> sestricky = new ArrayList<Sestricka>();
-		ArrayList<Recepcna> recepcne = new ArrayList<Recepcna>();
 		ArrayList<Pacient> pacienti = new ArrayList<Pacient>();
+		ArrayList<Zamestnanec> zamestnanci = new ArrayList<Zamestnanec>();
 		int i=0;
 		try (Scanner scan = new Scanner(subor)) {
-			System.out.println("Otvoril som");
-			System.out.println("ID "+id);
 			while(scan.hasNextLine()) {
 				i++;
 				
@@ -140,9 +137,9 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 				String email = casti[9];
 				int vek = Integer.parseInt(casti[7]);
 				
-				if("Z".equals(casti[1])) zubari.add(new Zubar(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'Z'));
-				if("S".equals(casti[1])) sestricky.add(new Sestricka(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'S'));
-				if("R".equals(casti[1])) recepcne.add(new Recepcna(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'R'));
+				if("Z".equals(casti[1])) zamestnanci.add(new Zubar(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'Z'));
+				if("S".equals(casti[1])) zamestnanci.add(new Sestricka(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'S'));
+				if("R".equals(casti[1])) zamestnanci.add(new Recepcna(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'R'));
 				if("P".equals(casti[1])) {
 					String rodne_c = casti[10];
 					String zub = casti[11];
@@ -162,9 +159,7 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 			e.printStackTrace();
 		}
 		if(m!=null) {
-			m.setZubari(zubari);
-			m.setRecepcia(recepcne);
-			m.setSestricky(sestricky);
+			m.setZamestnanci(zamestnanci);
 			m.setPacienti(pacienti);
 			m.setPocetPo(i);
 			return m;
@@ -172,7 +167,6 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		return null; //ak nenajdem majitela
 	}
 	public static Pacient nacitajPacienta(String nick, int id,char typ,String heslo) {
-		ArrayList<Termin> terminy = new ArrayList<Termin>(); //todo
 		File subor = new File(uzivatelia_cesta);
 		try (Scanner scan = new Scanner(subor)) {
 			while(scan.hasNextLine()) {

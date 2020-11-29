@@ -6,8 +6,9 @@ import databaza.Writer;
 import model.Adresa;
 import model.ID_typ;
 import model.PrihlasovacieUdaje;
+import model.TermPouzInterface;
 
-public class Pouzivatel {
+public class Pouzivatel implements TermPouzInterface{
 	//tu som to mal najprv vsetko private ale nedavalo mi to logicky moc zmysel
 	//pretoze samotnu class pouzivatel nemam inicializovanu iba sa z nej dedi
 	//a vsetky childy su v rovnakom package takze som to nechal na default...
@@ -31,7 +32,8 @@ public class Pouzivatel {
 		this.prihlas_udaje = null;
 	}
 	public String toString() {
-		String s= "Vase meno: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo:"
+		//System.out.println("Pouz to string");
+		String s= "Id: "+this.getId_typ().getId()+"\n Meno: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo:"
 				+this.tel_cislo + "\n Email: "+this.email + "\nAdresa: "+this.adresa.toString();
 		return s;
 	}
@@ -40,18 +42,19 @@ public class Pouzivatel {
 	}
 	void upravTel(Scanner scan) {
 		System.out.println("zadajte nove telefonne cislo");
-		String nov_tc = scan.nextLine();
+		String nov_tc = scan.next();
 		System.out.println("Chcete toto "+nov_tc+" cislo pridat? A/N");
-		if(scan.nextLine().toUpperCase().charAt(0)=='A') this.tel_cislo = nov_tc;
-		else this.upravOsUd();
+		if(scan.next().toUpperCase().charAt(0)=='A') this.tel_cislo = nov_tc;
+		else this.upravOsUd(scan);
+		System.out.println("Koncim T");
 		
 	}
 	void upravE(Scanner scan) {
-		System.out.println("Zadajte nove telefonne cislo");
+		System.out.println("Zadajte novy email");
 		String nov_e = scan.nextLine();
 		System.out.println("Chcete tento "+nov_e+" email? A/N");
 		if(scan.nextLine().toUpperCase().charAt(0)=='A') this.email = nov_e;
-		else this.upravOsUd();
+		else this.upravOsUd(scan);
 	}
 	void upravA(Scanner scan) {
 		System.out.println("Ulica:");
@@ -63,23 +66,23 @@ public class Pouzivatel {
 		Adresa adresa = new Adresa(ulica,cislo,obec);
 		System.out.println("Je tato adresa spravna? A/N"+adresa.toString());
 		if(scan.nextLine().toUpperCase().charAt(0)=='A') this.adresa=adresa;
-		else this.upravOsUd();
+		else this.upravOsUd(scan);
+		
 	}
-	public void upravOsUd() {
-		Scanner scan = new Scanner(System.in);
+	public void upravOsUd(Scanner scan) {
 		System.out.println("Zadajte co chcete zmenit: telefon (T), email (E), adresu (A), koniec (K)?");
-		char c = scan.nextLine().toUpperCase().charAt(0);
+		char c = scan.next().toUpperCase().charAt(0);
 		switch (c) {
 		case 'T': 
 			this.upravTel(scan);
-			break;
+			return;
 		case 'K': 
-			scan.close();
 			return; 
 		case 'E': this.upravE(scan);
+			return;
 		case 'A': this.upravA(scan);
+				return;
 		}
-		scan.close();
 	}
 	public void pridajPrihl_udaje(String nick, String heslo) {
 		this.prihlas_udaje = new PrihlasovacieUdaje(nick,heslo);

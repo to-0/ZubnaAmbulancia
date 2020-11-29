@@ -1,12 +1,14 @@
-package model;
+package terminy;
 
-public class Termin {
-	private int rok;
-	private int hodina;
-	private int minuta;
-	private int den;
-	private int mesiac;
-	private String zubar;
+import model.TermPouzInterface;
+
+public abstract class Termin implements TermPouzInterface {
+	int rok;
+	int hodina;
+	int minuta;
+	int den;
+	int mesiac;
+	String zubar;
 	public Termin( int den, int mesiac,int rok, int hodina, int minuta,String zubar) {
 		this.rok = rok;
 		this.hodina = hodina;
@@ -20,8 +22,6 @@ public class Termin {
 				+"\n Osetrujuci zubar: "+this.zubar;
 		return s;
 	}
-	public String toWriter() {
-		String s =  this.den+":"+this.mesiac+":"+this.rok+":"+this.hodina+":"+this.minuta+":"+this.zubar;
-		return s;
-	}
+	
+	
 }

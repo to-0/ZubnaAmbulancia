@@ -13,10 +13,10 @@ import pouzivatelia.Sestricka;
 import pouzivatelia.Zamestnanec;
 import pouzivatelia.Zubar;
 
-public class App {
+public class Aplikacia {
 	Pouzivatel pouzivatel;
 	public static void main(String[] args) {
-		App a = new App();
+		Aplikacia a = new Aplikacia();
 		a.start();
 		
 	}
@@ -90,11 +90,11 @@ public class App {
 				break;
 			case "pridajZam":
 				if(this.pouzivatel instanceof Majitel) {
-					((Majitel) this.pouzivatel).pridajZamestnanca();
+					((Majitel) this.pouzivatel).pridajZamestnanca(scan);
 				}
 				break;
 			case "upravOsUd":
-				this.pouzivatel.upravOsUd();
+				this.pouzivatel.upravOsUd(scan);
 				break;
 			case "zmenHeslo":
 				this.pouzivatel.zmenHeslo(scan);
@@ -142,8 +142,20 @@ public class App {
 					((Recepcna) this.pouzivatel).odstranPacienta(id);
 				}
 				break;
+			case "odstranZamestnanca":
+				if(this.pouzivatel instanceof Majitel) {
+					System.out.println("Id zamestnanca");
+					int id = scan.nextInt();
+					((Majitel) this.pouzivatel).odstranZamestnanca(id);
+				}
+				break;
+			case "pridajTerm":
+				if(this.pouzivatel instanceof Sestricka) {
+					((Sestricka) this.pouzivatel).pridajTerm(scan);
+				}
+				break;
 		}
-			prikaz = scan.nextLine();
+			prikaz= scan.nextLine();
 		}
 		System.out.println("Program skoncil");
 	}
