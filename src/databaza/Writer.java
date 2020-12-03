@@ -7,13 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import jadro.Aplikacia;
-import pouzivatelia.Pacient;
 import pouzivatelia.Pouzivatel;
-import terminy.Termin;
-import terminy.VolnyTermin;
 
 public class Writer {
 	public static final String prihlasovania_cesta = System.getProperty("user.dir")+"\\src\\databaza\\prihlasovania.txt";
@@ -70,13 +64,15 @@ public class Writer {
 		        writer.close(); 
 		        reader.close(); 
 		        inputFile.delete();
-		        boolean successful = tempFile.renameTo(inputFile);
+		        tempFile.renameTo(inputFile);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Nieco sa pokazilo");
 			e.printStackTrace();
+			return;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Nieco sa pokazilo");
 			e.printStackTrace();
+			return;
 		}
 	}
 	public static boolean pridajRiadok(String cesta,String riadok) {

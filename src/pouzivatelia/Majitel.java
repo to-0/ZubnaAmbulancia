@@ -57,33 +57,33 @@ public class Majitel extends Zamestnanec {
 			String heslo = scan.nextLine();
 			switch(typ.charAt(0)) {
 			case 'Z':
-				Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'Z');
+				Zubar z = new Zubar(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo(),'Z');
 				this.setPocetPo(this.getPocetPo()+1);
 				z.pridajPrihl_udaje(nick, heslo);
 				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,z.toWriter())) {
-					String riadok = (this.getPocetPo())+":"+z.getPrihlasUdaje().toWriter()+":Z";
+					String riadok = z.getId_typ().getId()+":"+z.getPrihlasUdaje().toWriter()+":Z";
 					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
 				}
 				
 				zamestnanci.add(z);
 				break;
 			case 'R':
-				Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'R');
+				Recepcna rec = new Recepcna(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo(),'R');
 				zamestnanci.add(rec);
 				rec.pridajPrihl_udaje(nick, heslo);
 				this.setPocetPo(this.getPocetPo()+1);
 				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,rec.toWriter())) {
-					String riadok = (this.getPocetPo())+":"+rec.getPrihlasUdaje().toWriter()+":R";
+					String riadok = rec.getId_typ().getId()+":"+rec.getPrihlasUdaje().toWriter()+":R";
 					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
 				}
 				break;
 			case 'S':
-				Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo()+1,'S');
+				Sestricka s = new Sestricka(meno, priezvisko,ulica,cislo_domu,obec, vek, cislo, email,this.getPocetPo(),'S');
 				zamestnanci.add(s);
 				s.pridajPrihl_udaje(nick, heslo);
 				this.setPocetPo(this.getPocetPo()+1);
 				if(Writer.pridajRiadok(Writer.uzivatelia_cesta,s.toWriter())) {
-					String riadok = (this.getPocetPo())+":"+s.getPrihlasUdaje().toWriter()+":R";
+					String riadok = s.getId_typ().getId()+":"+s.getPrihlasUdaje().toWriter()+":R";
 					Writer.pridajRiadok(Writer.prihlasovania_cesta, riadok);
 				}
 			}
@@ -99,7 +99,6 @@ public class Majitel extends Zamestnanec {
 			if(z.getId_typ().getId()==id) {
 				if(Writer.vymazRiadok(Writer.uzivatelia_cesta, z.toWriter())) {
 					String riadok = Reader.najdiPrihlUd(id);
-					System.out.println("tento riadok: "+riadok);
 					Writer.vymazRiadok(Writer.prihlasovania_cesta, riadok);
 				}
 				return;	

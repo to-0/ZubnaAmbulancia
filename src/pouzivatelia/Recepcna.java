@@ -11,7 +11,7 @@ public class Recepcna extends Zamestnanec {
 		super(meno, priezvisko,ulica,cislo_domu, obec, vek, telefon, email, id, typ);
 	}
 	public boolean pridajPacienta(Scanner scan) {
-		int id = this.pocetPo+1;
+		int id = this.pocetPo; //idcka su od nuly cize pocet je vzdy ako keby o 1 vacsi... cize nedam +1 ale zvysim iba pocet o 1
 		this.pocetPo++;
 		try {
 			scan.nextLine();

@@ -31,48 +31,38 @@ public class Aplikacia {
 		if(id_typ==null) this.start();
 		switch(id_typ.getTyp()) {
 		case 'M':
-			this.pouzivatel= (Majitel) Reader.nacitajMajitela(meno, id_typ.getId(),id_typ.getTyp(),heslo);
+			this.pouzivatel= Reader.nacitajMajitela(meno, id_typ.getId(),id_typ.getTyp(),heslo);
 			if(this.pouzivatel==null) {
 				System.out.println("Nenasiel");
-				return false;
-			}
-			this.akcie(scan);
-			break;
-		case 'Z':
-			this.pouzivatel= (Zubar) Reader.nacitajZamestnanca(meno, id_typ.getId(), id_typ.getTyp(),heslo);
-			if(this.pouzivatel==null) {
-				System.out.println("Nenasiel");
-				return false;
-			}
-			this.akcie(scan);
-			break;
-		case 'S':
-			this.pouzivatel= (Sestricka) Reader.nacitajZamestnanca(meno, id_typ.getId(), id_typ.getTyp(),heslo);
-			if(this.pouzivatel==null) return false;
-			this.akcie(scan);
-			break;
-		case 'R':
-			this.pouzivatel= (Recepcna) Reader.nacitajZamestnanca(meno, id_typ.getId(), id_typ.getTyp(),heslo);
-			if(this.pouzivatel==null) {
-				System.out.println("Nenasiel");
+				scan.close();
 				return false;
 			}
 			this.akcie(scan);
 			break;
 		case 'P':
-			this.pouzivatel = (Pacient) Reader.nacitajPacienta(meno, id_typ.getId(), id_typ.getTyp(), heslo);
+			this.pouzivatel = Reader.nacitajPacienta(meno, id_typ.getId(), id_typ.getTyp(), heslo);
 			if(this.pouzivatel==null) {
 				System.out.println("Nenasiel");
+				scan.close();
 				return false;
 			}
 			this.akcie(scan);
+		default:
+			this.pouzivatel=  Reader.nacitajZamestnanca(meno, id_typ.getId(), id_typ.getTyp(),heslo);
+			if(this.pouzivatel==null) {
+				System.out.println("Nenasiel");
+				scan.close();
+				return false;
+			}
+			this.akcie(scan);
+			break;
 		}
-		
 		scan.close();
 		return false;
 	}
 	
-	public void akcie(Scanner scan) {
+	void akcie(Scanner scan) {
+		this.pouzivatel.login();
 		String prikaz = scan.next();
 		while(!prikaz.equals("koniec")) {
 			switch(prikaz) {
@@ -88,7 +78,7 @@ public class Aplikacia {
 			case "vypisOsInf":
 				this.pouzivatel.vypisOsInf();
 				break;
-			case "pridajZam":
+			case "pridajZamestnanca":
 				if(this.pouzivatel instanceof Majitel) {
 					((Majitel) this.pouzivatel).pridajZamestnanca(scan);
 				}
@@ -135,6 +125,7 @@ public class Aplikacia {
 				if(this.pouzivatel instanceof Recepcna) {
 					((Recepcna) this.pouzivatel).pridajPacienta(scan);
 				}
+				break;
 			case "odstranPacienta":
 				if(this.pouzivatel instanceof Recepcna) {
 					System.out.println("Id pacienta");

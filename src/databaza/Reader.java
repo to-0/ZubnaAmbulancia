@@ -7,8 +7,6 @@ import java.util.Scanner;
 import model.ID_typ;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import pouzivatelia.Majitel;
 import pouzivatelia.Pacient;
 import pouzivatelia.Recepcna;
@@ -24,7 +22,7 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 	static String uzivatelia_cesta =  System.getProperty("user.dir")+"\\src\\databaza\\uzivatelia.txt";
 	static String rez_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\rezervovane_terminy.txt";
 	static String volne_term_cesta = System.getProperty("user.dir")+"\\src\\databaza\\volne_terminy.txt";
-
+	//nacita arraylist rezervovanych terminov daneho pacienta alebo zubara a vrati vsetky rezervovane terminy zo suboru rezervovane_terminy.txt
 	public static ArrayList<RezerTermin> nacitajRezerTerm(String priezvisko,ID_typ id_typ){ //priezvisko a typ ci je zubar alebo pacient
 		File f;
 		f = new File(rez_term_cesta);
@@ -37,12 +35,12 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 				nasiel = false;
 				String riadok = scan.nextLine();
 				String []arr = riadok.split(":");
-				System.out.println(riadok);
+				//System.out.println(riadok);
 				if(id_typ.getTyp()=='P' && id_typ.getId()==Integer.parseInt(arr[7])) {
-					if(arr[5].equals(priezvisko)) nasiel = true;
+					if(arr[6].equals(priezvisko)) nasiel = true;
 				}
 				else { //ak je to zubar tak v tom subore je jeho meno na 6 pozicii
-					if(arr[6].equals(priezvisko)) nasiel = true;	
+					if(arr[5].equals(priezvisko)) nasiel = true;	
 				}
 				if(nasiel) {
 					terminy.add(new RezerTermin(Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),
@@ -72,7 +70,6 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 			scan.close();
 			return zoznam;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -83,7 +80,7 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		try (Scanner scan = new Scanner(subor)) {
 			while(scan.hasNextLine()) {
 				String riadok = scan.nextLine();
-				System.out.println(riadok);
+				//System.out.println(riadok);
 				String []parts = riadok.split(":");
 				if(Integer.parseInt(parts[0])==id) {
 					return riadok;
@@ -101,11 +98,8 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 		try (Scanner scan = new Scanner(subor)) {
 			while(scan.hasNextLine()) {
 				String riadok = scan.nextLine();
-				System.out.println(riadok);
 				String[] casti = riadok.split(":");
-				System.out.println(Arrays.toString(casti));
 				if(meno.equals(casti[1]) && heslo.equals(casti[2])) {
-					System.out.println("Rovna sa");
 					return new ID_typ(Integer.parseInt(casti[0]),casti[3].charAt(0));
 				}
 					
@@ -221,8 +215,6 @@ public class Reader { //cita subory, vytvara objekty ked sa prihlasi pouzivatel,
 					pacienti.add(new Pacient(krstne_meno,priezvisko,ulica,cislo_domu,obec,vek,cislo,email,Integer.parseInt(casti[0]),'P',rodne_c,zub,poistovna));
 					
 				}
-				//System.out.println("ID ="+casti[0]);
-				//System.out.println("Hladam"+id);
 				//nasiel som daneho zamestnanca nacitam udaje o nom 
 				if(id==Integer.parseInt(casti[0])) {
 					switch(typ){

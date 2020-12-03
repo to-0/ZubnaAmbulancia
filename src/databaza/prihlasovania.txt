@@ -1,6 +1,7 @@
 0:admin:admin:M
 1:zub:123:Z
 2:pac1:pac3:P
-4:Janka:123:R
-5:neviem:neviem:Z
-6:no:no:Z
+3:Janka:123:S
+4:Tomko:123:R
+5:Jozko:123:Z
+5:test:test:R

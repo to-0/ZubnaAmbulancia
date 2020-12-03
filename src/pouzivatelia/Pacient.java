@@ -20,6 +20,11 @@ public class Pacient extends Pouzivatel {
 		this.meno_zubara= "Nezadane";
 		this.volne_terminy = Reader.nacitajVolneTerm(this.meno_zubara);
 	}
+	public void login() {
+		super.login();
+		System.out.println("Zoznam najblizsich terminov:");
+		this.vypisPacTerminy();
+	}
 	public Pacient(String meno,String priezvisko,String ulica,int cislo_domu, String obec, int vek, String telefon,String email,int id, char typ,
 			String rodne_cislo, String meno_z,String poistovna){
 		super(meno, priezvisko,ulica,cislo_domu,obec, vek, telefon, email, id, typ);

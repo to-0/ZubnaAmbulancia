@@ -33,8 +33,8 @@ public class Pouzivatel implements TermPouzInterface{
 	}
 	public String toString() {
 		//System.out.println("Pouz to string");
-		String s= "Id: "+this.getId_typ().getId()+"\n Meno: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo:"
-				+this.tel_cislo + "\n Email: "+this.email + "\nAdresa: "+this.adresa.toString();
+		String s= "Id: "+this.getId_typ().getId()+"\nMeno: "+this.meno+" "+this.priezvisko+"\nVek: " + this.vek+"\nTelefonne cislo:"
+				+this.tel_cislo + "\nEmail: "+this.email + "\nAdresa: "+this.adresa.toString();
 		return s;
 	}
 	public void vypisOsInf() {
@@ -56,6 +56,7 @@ public class Pouzivatel implements TermPouzInterface{
 		if(scan.nextLine().toUpperCase().charAt(0)=='A') this.email = nov_e;
 		else this.upravOsUd(scan);
 	}
+	
 	void upravA(Scanner scan) {
 		System.out.println("Ulica:");
 		String ulica = scan.nextLine();
@@ -91,6 +92,9 @@ public class Pouzivatel implements TermPouzInterface{
 		String s = this.id_typ.getId()+":"+this.id_typ.getTyp()+":"+this.meno+":"+this.priezvisko+":"+this.adresa.getUlica()+":"+
 	this.adresa.getCislo_domu()+":"+this.adresa.getObec()+":"+this.vek+":"+this.tel_cislo+":"+this.email;
 		return s;
+	}
+	public void login() {
+		System.out.println("Prihlasili ste sa ako "+this.meno + " "+this.priezvisko);
 	}
 	public void zmenHeslo(Scanner scan) {
 		System.out.println("Zadajte stare heslo:");

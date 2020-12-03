@@ -13,6 +13,15 @@ public class Zubar extends Zamestnanec {
 
 	private ArrayList<RezerTermin> terminy = new ArrayList<RezerTermin>();
 	
+	public String toString() {
+		String s = super.toString()+"\n Pocet terminov:"+this.terminy.size();
+		return s;
+	}
+	public void login() {
+		super.login();
+		System.out.println("Vase terminy su:");
+		this.prehladTerminov();
+	}
 	public void prehladTerminov() {
 		for(RezerTermin t: this.terminy) {
 			System.out.println(t.toString());
