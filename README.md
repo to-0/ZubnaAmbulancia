@@ -1,2 +1,2 @@
 # ZubnaAmbulancia
-Projekt na základy objektovo orientovaného programovania
+Projekt na základy objektovo orientovaného programovania.
